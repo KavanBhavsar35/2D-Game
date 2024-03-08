@@ -4,5 +4,11 @@ import java.awt.image.BufferedImage;
 
 public class Tile {
 	public BufferedImage image;
-	public boolean collisio  = false;
+	public boolean collision  = false;
+
+	public Tile() {}
+	public Tile(BufferedImage image, boolean collision) {
+		this.collision = collision;
+		this.image = image;
+	}
 }

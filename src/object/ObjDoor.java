@@ -13,5 +13,6 @@ public class ObjDoor extends SuperObject {
         } catch (IOException e) {
             System.out.println("Error: " + e);
         }
+        collision = true;
     }
 }

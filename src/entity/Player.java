@@ -17,6 +17,7 @@ public class Player extends Entity {
 
     public final int screenX;
     public final int screenY;
+    int hasKeys = 0;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         this.gamePanel = gamePanel;
@@ -25,8 +26,13 @@ public class Player extends Entity {
         screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2);
         screenY = gamePanel.screenLength / 2 - (gamePanel.tileSize / 2);
 
-        solidArea = new Rectangle(8, 16, 32, 32);
-
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+        solidArea.width = 32;
+        solidArea.height = 32;
 
         this.setDefaultValue();
         this.getPlayerImage();
@@ -69,6 +75,9 @@ public class Player extends Entity {
             //checl if collide 
             collionOn = false;
             gamePanel.collisionChecker.checkTile(this);
+            //checl object collision
+            int objIndex = gamePanel.collisionChecker.checkObject(this, true);
+            pickUpObject(objIndex);
             // IF collison is move plaery can move
 
             if (collionOn == false) {
@@ -88,6 +97,25 @@ public class Player extends Entity {
 	        	spriteCounter = 0;
 	        }
     	}
+    }
+
+    public void pickUpObject(int objIndex) {
+        if (objIndex != 999) {
+            String objName = gamePanel.obj[objIndex].name;
+            switch (objName) {
+                case "Key":
+                    hasKeys++;
+                    gamePanel.obj[objIndex] = null;
+                    System.out.println("Keys: " + hasKeys);
+                    break;
+                case "Door":
+                    if (hasKeys > 0) {
+                        gamePanel.obj[objIndex] = null;
+                        hasKeys--;
+                    }
+                    System.out.println("Keys: " + hasKeys);
+            }
+        }
     }
 
     public void draw(Graphics2D g2) {

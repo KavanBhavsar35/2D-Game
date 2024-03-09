@@ -104,16 +104,24 @@ public class Player extends Entity {
             String objName = gamePanel.obj[objIndex].name;
             switch (objName) {
                 case "Key":
+                    gamePanel.playSoundEffect(1);
                     hasKeys++;
                     gamePanel.obj[objIndex] = null;
                     System.out.println("Keys: " + hasKeys);
                     break;
                 case "Door":
+                    gamePanel.playSoundEffect(3);
                     if (hasKeys > 0) {
                         gamePanel.obj[objIndex] = null;
                         hasKeys--;
                     }
                     System.out.println("Keys: " + hasKeys);
+                    break;
+                case "Boots":
+                    gamePanel.playSoundEffect(2);
+                    speed += 1;
+                    gamePanel.obj[objIndex] = null;
+                    break;
             }
         }
     }

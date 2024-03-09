@@ -33,13 +33,16 @@ public class GamePanel extends JPanel implements Runnable {
     public final int worldHeight =  tileSize * maxWorldCol;
     public final int worldWidth =  tileSize * maxWorldRow;
 
+    //manager
     TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
+    Sound sound = new Sound();
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public SuperObject[] obj = new  SuperObject[10];
     public Player player = new Player(this, keyHandler);
     public AssetSetter assetSetter = new AssetSetter(this);
+
     
     // Game panel config
     public GamePanel() {
@@ -57,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
     public void setupGame() {
         assetSetter.setObject();
+        playMusic(0);
     }
     // run function - called on thread
     @Override
@@ -115,5 +119,17 @@ public class GamePanel extends JPanel implements Runnable {
 
         g2.dispose();
     }
-
+    public void playMusic(int i) {
+        
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+    public void stopMusic() {
+        sound.stop();
+    }
+    public void playSoundEffect(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
 }

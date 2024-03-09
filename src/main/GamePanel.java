@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
     // Calculating Sizes
     public final int tileSize = originalTileSize * scale;
     public final int screenWidth = tileSize * maxScreenCol;
-    public final int screenLength = tileSize * maxScreenRow;
+    public final int screenHeight = tileSize * maxScreenRow;
 
     // FPS
     final int fps = 60;
@@ -37,16 +37,18 @@ public class GamePanel extends JPanel implements Runnable {
     TileManager tileManager = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
-    Sound sound = new Sound();
+    Sound music = new Sound();
+    Sound soundEffect = new Sound();
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public SuperObject[] obj = new  SuperObject[10];
     public Player player = new Player(this, keyHandler);
     public AssetSetter assetSetter = new AssetSetter(this);
+    public UI ui =  new UI(this);
 
     
     // Game panel config
     public GamePanel() {
-        this.setPreferredSize(new Dimension(screenWidth, screenLength));
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyHandler);
@@ -116,20 +118,20 @@ public class GamePanel extends JPanel implements Runnable {
             }
         }
         player.draw(g2);
-
+        ui.draw(g2);
         g2.dispose();
     }
     public void playMusic(int i) {
         
-        sound.setFile(i);
-        sound.play();
-        sound.loop();
+        music.setFile(i);
+        music.play();
+        music.loop();
     }
     public void stopMusic() {
-        sound.stop();
+        music.stop();
     }
     public void playSoundEffect(int i) {
-        sound.setFile(i);
-        sound.play();
+        soundEffect.setFile(i);
+        soundEffect.play();
     }
 }

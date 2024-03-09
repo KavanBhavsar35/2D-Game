@@ -17,14 +17,14 @@ public class Player extends Entity {
 
     public final int screenX;
     public final int screenY;
-    int hasKeys = 0;
+    public int hasKeys = 0;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
 
         screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2);
-        screenY = gamePanel.screenLength / 2 - (gamePanel.tileSize / 2);
+        screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2);
 
         solidArea = new Rectangle();
         solidArea.x = 8;
@@ -107,20 +107,30 @@ public class Player extends Entity {
                     gamePanel.playSoundEffect(1);
                     hasKeys++;
                     gamePanel.obj[objIndex] = null;
-                    System.out.println("Keys: " + hasKeys);
+                    gamePanel.ui.showMessage("You got a Key !");
                     break;
                 case "Door":
-                    gamePanel.playSoundEffect(3);
-                    if (hasKeys > 0) {
+                if (hasKeys > 0) {
+                        gamePanel.playSoundEffect(3);
                         gamePanel.obj[objIndex] = null;
                         hasKeys--;
+                        gamePanel.ui.showMessage("You opened a door !");
+                    } else {
+                        gamePanel.ui.showMessage("You dont have a Key !");
+
                     }
-                    System.out.println("Keys: " + hasKeys);
                     break;
                 case "Boots":
                     gamePanel.playSoundEffect(2);
                     speed += 1;
                     gamePanel.obj[objIndex] = null;
+                    gamePanel.ui.showMessage("Speed up !");
+                    break;
+                case "Chest":
+                    gamePanel.ui.gameFinished =  true;
+                    gamePanel.ui.showMessage("You dont have a Key !");
+                    gamePanel.stopMusic();
+                    gamePanel.playSoundEffect(4);
                     break;
             }
         }

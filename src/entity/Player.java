@@ -4,15 +4,11 @@ import main.KeyHandler;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-
 import main.GamePanel;
 
 public class Player extends Entity {
     
     // INITATION FOR INSTANCES
-    GamePanel gamePanel;
     KeyHandler keyHandler;
     
     public final int screenX;
@@ -22,7 +18,7 @@ public class Player extends Entity {
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         
         // INITIATION
-        this.gamePanel = gamePanel;
+        super(gamePanel);
         this.keyHandler = keyHandler;
 
         // PLAYER CENTER POSITION
@@ -50,22 +46,17 @@ public class Player extends Entity {
         direction = "down";
     }
 
+    // LOAD IMAGES
     public void getPlayerImage() {
 
-        // RENDERING DIFFERENT IMAGES
-        try {
-            up1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_1.png"));
-            up2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_2.png"));
-            down2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_down_2.png"));
-            down1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_down_1.png"));
-            left1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_1.png"));
-            left2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_left_2.png"));
-            right1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_1.png"));
-            right2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_right_2.png"));
-        } catch (IOException e) {
-            System.out.println("errror" + e);
-            e.printStackTrace();
-        }
+        up1 = setup("/player/boy_up_1.png");
+        up2 = setup("/player/boy_up_2.png");
+        down2 = setup("/player/boy_down_2.png");
+        down1 = setup("/player/boy_down_1.png");
+        left1 = setup("/player/boy_left_1.png");
+        left2 = setup("/player/boy_left_2.png");
+        right1 = setup("/player/boy_right_1.png");
+        right2 = setup("/player/boy_right_2.png");
     }
 
     // UPDATE PLAYER IF CHANGED
@@ -86,6 +77,10 @@ public class Player extends Entity {
             // CHECK OBJECT COLLISION
             int objIndex = gamePanel.collisionChecker.checkObject(this, true);
             pickUpObject(objIndex);
+            
+            // CHECK NPC ? MONSTER COLLISION
+            int npcIndex =  gamePanel.collisionChecker.checkEntity(this, gamePanel.npc);
+            interactNPC(npcIndex);
             
             // MOVE IF COLLISION IS OFF
             if (collionOn == false) {
@@ -111,6 +106,13 @@ public class Player extends Entity {
     public void pickUpObject(int objIndex) {
         if (objIndex != 999) {
             
+        }
+    }
+
+    // INTERACTION
+    public void interactNPC(int i) {
+        if (i != 999) {
+            System.out.println("hitt");
         }
     }
 

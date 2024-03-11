@@ -7,16 +7,28 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 public class Sound {
+
+    // CONSTANTS
+    public static final int maxSounds = 30;
+
     Clip clip;
-    URL soundURL[] = new URL[30];
+    URL soundURL[] = new URL[maxSounds];
     public Sound() {
-        soundURL[0] = getClass().getResource("/sound/BlueBoyAdventure.wav");
-        soundURL[1] = getClass().getResource("/sound/coin.wav");
-        soundURL[2] = getClass().getResource("/sound/powerup.wav");
-        soundURL[3] = getClass().getResource("/sound/unlock.wav");
-        soundURL[4] = getClass().getResource("/sound/fanfare.wav");
+
+        // CONSTANTS
+        String[] audioPath = { "BlueBoyAdventure.wav", "coin.wav", "powerup.wav", "unlock.wav", "fanfare.wav" };
+        for (int i = 0; i < audioPath.length; i++) {
+            
+            try {
+                
+                soundURL[i] = getClass().getResource("/sound/" + audioPath[i]);
+            } catch (Exception e) {
+                System.out.println("Error: " + e);
+            }
+        }
     }
 
+    // LINKING EVENT TO SOUND
     public void setFile(int i) {
         try {
             
@@ -28,6 +40,8 @@ public class Sound {
             System.out.println("Error: " + e);
         }
     }
+
+    // CONTROLS
     public void play() {
         clip.start();
         

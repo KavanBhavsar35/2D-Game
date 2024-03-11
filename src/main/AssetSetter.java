@@ -8,41 +8,20 @@ import object.ObjKey;
 public class AssetSetter {
     GamePanel gamePanel;
 
+    // INITIATION
     public AssetSetter(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
 
+    // SETUP OBJECTS 
     public void setObject() {
-        gamePanel.obj[0] = new ObjKey();
-        gamePanel.obj[0].worldX = 23 * gamePanel.tileSize;
-        gamePanel.obj[0].worldY = 7 * gamePanel.tileSize;
-
-        gamePanel.obj[1] = new ObjKey();
-        gamePanel.obj[1].worldX = 23 * gamePanel.tileSize;
-        gamePanel.obj[1].worldY = 40 * gamePanel.tileSize;
-
-        gamePanel.obj[2] = new ObjKey();
-        gamePanel.obj[2].worldX = 37 * gamePanel.tileSize;
-        gamePanel.obj[2].worldY = 7 * gamePanel.tileSize;
-
-        gamePanel.obj[3] = new ObjDoor();
-        gamePanel.obj[3].worldX = 10 * gamePanel.tileSize;
-        gamePanel.obj[3].worldY = 11 * gamePanel.tileSize;
-
-        gamePanel.obj[4] = new ObjDoor();
-        gamePanel.obj[4].worldX = 8 * gamePanel.tileSize;
-        gamePanel.obj[4].worldY = 28 * gamePanel.tileSize;
-
-        gamePanel.obj[5] = new ObjDoor();
-        gamePanel.obj[5].worldX = 12 * gamePanel.tileSize;
-        gamePanel.obj[5].worldY = 22 * gamePanel.tileSize;
-
-        gamePanel.obj[6] = new ObjChest();
-        gamePanel.obj[6].worldX = 10 * gamePanel.tileSize;
-        gamePanel.obj[6].worldY = 7 * gamePanel.tileSize;
-
-        gamePanel.obj[7] = new ObjBoots();
-        gamePanel.obj[7].worldX = 37 * gamePanel.tileSize;
-        gamePanel.obj[7].worldY = 42 * gamePanel.tileSize;
+        gamePanel.obj[0] = new ObjKey(23, 7);
+        gamePanel.obj[1] = new ObjKey(23, 40);
+        gamePanel.obj[2] = new ObjKey(37, 7);
+        gamePanel.obj[3] = new ObjDoor(10, 11);
+        gamePanel.obj[4] = new ObjDoor(8, 28);
+        gamePanel.obj[5] = new ObjDoor(12, 22);
+        gamePanel.obj[6] = new ObjChest(10, 7);
+        gamePanel.obj[7] = new ObjBoots(37, 42);    
     }
 }

@@ -10,19 +10,22 @@ import object.ObjKey;
 
 public class UI {
 
+    // INITIATION
     GamePanel gamePanel;
     Font arial_40, arial_80B;
     BufferedImage keyImage;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
-    int messageDuration = 2; //sec
+    int messageDuration = 2; // sec
     public boolean gameFinished = false;
 
     double playTime;
     DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
-    public UI (GamePanel gamePanel) {
+    public UI(GamePanel gamePanel) {
+
+        // UI SETTINGS
         this.gamePanel = gamePanel;
         arial_40 = new Font("Dialog", Font.PLAIN, 40);
         arial_80B = new Font("Dialog", Font.BOLD, 80);
@@ -31,12 +34,14 @@ public class UI {
 
     }
 
+    // ACCESS FUNCTIONS
     public void showMessage(String text) {
         message = text;
         messageOn = true;
     }
-    public void draw(Graphics2D g2) {
 
+    // RENDERING MESSAGES
+    public void draw(Graphics2D g2) {
 
         if (gameFinished) {
             g2.setFont(arial_40);
@@ -47,51 +52,55 @@ public class UI {
             int x;
             int y;
 
+            // GAME END BANNER
             text = "You Found the treasure !!";
-            textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-            x = gamePanel.screenWidth / 2 - textLength / 2;
-            y = gamePanel.screenHeight / 2 - (gamePanel.tileSize * 3);
+            textLength = UtilityTool.textLength(g2, text);
+            x = GamePanel.screenWidth / 2 - textLength / 2;
+            y = GamePanel.screenHeight / 2 - (GamePanel.tileSize * 3);
             g2.drawString(text, x, y);
-
-
+            
             text = "Your Time is " + decimalFormat.format(playTime) + "!!";
-            textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-            x = gamePanel.screenWidth / 2 - textLength / 2;
-            y = gamePanel.screenHeight / 2 + (gamePanel.tileSize * 3);
+            textLength = UtilityTool.textLength(g2, text);
+            x = GamePanel.screenWidth / 2 - textLength / 2;
+            y = GamePanel.screenHeight / 2 + (GamePanel.tileSize * 3);
             g2.drawString(text, x, y);
-
+            
             g2.setFont(arial_80B);
             g2.setColor(Color.YELLOW);
-            text = "Congratulations";
-            textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
-            x = gamePanel.screenWidth / 2 - textLength / 2;
-            y = gamePanel.screenHeight / 2 + (gamePanel.tileSize * 2);
-            g2.drawString(text, x, y);
-            gamePanel.gameThread =  null;
-        } else {
             
+            text = "Congratulations";
+            textLength = UtilityTool.textLength(g2, text);
+            x = GamePanel.screenWidth / 2 - textLength / 2;
+            y = GamePanel.screenHeight / 2 + (GamePanel.tileSize * 2);
+            g2.drawString(text, x, y);
+
+            gamePanel.gameThread = null;
+        } else {
+
+            // UI COMPONENTS
             g2.setFont(arial_40);
             g2.setColor(Color.white);
-            g2.drawImage(keyImage, gamePanel.tileSize / 2, gamePanel.tileSize / 2, gamePanel.tileSize, gamePanel.tileSize, null);
+            g2.drawImage(keyImage, GamePanel.tileSize / 2, GamePanel.tileSize / 2, GamePanel.tileSize,
+                    GamePanel.tileSize, null);
             g2.drawString(" X " + gamePanel.player.hasKeys, 70, 65);
 
-            //TIME
-            playTime += (double)1/gamePanel.fps;
-            g2.drawString("Time: " + decimalFormat.format(playTime), gamePanel.tileSize * (gamePanel.maxScreenRow - 1), gamePanel.tileSize * 1 + gamePanel.tileSize / 4);
+            // TIME
+            playTime += (double) 1 / GamePanel.fps;
+            g2.drawString("Time: " + decimalFormat.format(playTime), GamePanel.tileSize * (GamePanel.maxScreenRow - 1),
+                    GamePanel.tileSize * 1 + GamePanel.tileSize / 4);
 
-            //MESSAGE
+            // MESSAGE
             if (messageOn) {
                 g2.setFont(g2.getFont().deriveFont(30f));
-                g2.drawString(message, gamePanel.tileSize * (gamePanel.maxScreenRow - 1) + gamePanel.tileSize / 2, gamePanel.tileSize * (gamePanel.maxScreenCol - 5) + gamePanel.tileSize / 2);
-                
+                g2.drawString(message, GamePanel.tileSize * (GamePanel.maxScreenRow - 1) + GamePanel.tileSize / 2,
+                        GamePanel.tileSize * (GamePanel.maxScreenCol - 5) + GamePanel.tileSize / 2);
+
                 messageCounter++;
-                
-                if (messageCounter > messageDuration * gamePanel.fps) {
+
+                if (messageCounter > messageDuration * GamePanel.fps) {
                     messageCounter = 0;
                     messageOn = false;
                 }
-
-                
             }
         }
     }

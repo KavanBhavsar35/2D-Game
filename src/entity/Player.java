@@ -7,25 +7,30 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-
 import main.GamePanel;
 
 public class Player extends Entity {
-
+    
+    // INITATION FOR INSTANCES
     GamePanel gamePanel;
     KeyHandler keyHandler;
-
+    
     public final int screenX;
     public final int screenY;
     public int hasKeys = 0;
-
+    
+    // CONSTRUCTOR
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
+        
+        // INITIATION
         this.gamePanel = gamePanel;
         this.keyHandler = keyHandler;
 
-        screenX = gamePanel.screenWidth / 2 - (gamePanel.tileSize / 2);
-        screenY = gamePanel.screenHeight / 2 - (gamePanel.tileSize / 2);
+        // PLAYER CENTER POSITION
+        screenX = GamePanel.screenWidth / 2 - (GamePanel.tileSize / 2);
+        screenY = GamePanel.screenHeight / 2 - (GamePanel.tileSize / 2);
 
+        // COLLIDABLE AREA FOR PLAYER
         solidArea = new Rectangle();
         solidArea.x = 8;
         solidArea.y = 16;
@@ -38,14 +43,17 @@ public class Player extends Entity {
         this.getPlayerImage();
     }
 
+    // DEFAULT VALS
     public void setDefaultValue() {
-        worldX = gamePanel.tileSize * 23;
-        worldY = gamePanel.tileSize * 21;
+        worldX = GamePanel.tileSize * 23;
+        worldY = GamePanel.tileSize * 21;
         speed = 4;
         direction = "down";
     }
 
     public void getPlayerImage() {
+
+        // RENDERING DIFFERENT IMAGES
         try {
             up1 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_1.png"));
             up2 = ImageIO.read(getClass().getResourceAsStream("/player/boy_up_2.png"));
@@ -61,7 +69,7 @@ public class Player extends Entity {
         }
     }
 
-    // update player if
+    // UPDATE PLAYER IF CHANGED
     public void update() {
     	
     	if (keyHandler.upPressed == true || keyHandler.downPressed == true || 
@@ -72,14 +80,15 @@ public class Player extends Entity {
             else if (keyHandler.leftPressed == true)  direction = "left"; 
             else if (keyHandler.rightPressed == true)  direction = "right"; 
             
-            //checl if collide 
+            // CHECK TILE COLLISION
             collionOn = false;
             gamePanel.collisionChecker.checkTile(this);
-            //checl object collision
+
+            // CHECK OBJECT COLLISION
             int objIndex = gamePanel.collisionChecker.checkObject(this, true);
             pickUpObject(objIndex);
-            // IF collison is move plaery can move
-
+            
+            // MOVE IF COLLISION IS OFF
             if (collionOn == false) {
                 switch (direction) {
                     case "up": worldY -= speed; break;
@@ -89,7 +98,7 @@ public class Player extends Entity {
                 }
             }
 
-
+            // SWAP BETWEEN DIFFERENT IMAGES
 	        spriteCounter++;
 	        if (spriteCounter > 12) {
 	        	if (spriteNum == 1) spriteNum = 2; 
@@ -99,63 +108,64 @@ public class Player extends Entity {
     	}
     }
 
+    // PICK A OBJECT
     public void pickUpObject(int objIndex) {
         if (objIndex != 999) {
             String objName = gamePanel.obj[objIndex].name;
             switch (objName) {
                 case "Key":
-                    gamePanel.playSoundEffect(1);
-                    hasKeys++;
-                    gamePanel.obj[objIndex] = null;
                     gamePanel.ui.showMessage("You got a Key !");
+                    gamePanel.playSoundEffect(1);
+                    gamePanel.obj[objIndex] = null;
+                    hasKeys++;
                     break;
                 case "Door":
                 if (hasKeys > 0) {
                         gamePanel.playSoundEffect(3);
+                        gamePanel.ui.showMessage("You opened a door !");
                         gamePanel.obj[objIndex] = null;
                         hasKeys--;
-                        gamePanel.ui.showMessage("You opened a door !");
                     } else {
                         gamePanel.ui.showMessage("You dont have a Key !");
-
                     }
                     break;
                 case "Boots":
-                    gamePanel.playSoundEffect(2);
-                    speed += 1;
-                    gamePanel.obj[objIndex] = null;
                     gamePanel.ui.showMessage("Speed up !");
+                    gamePanel.playSoundEffect(2);
+                    gamePanel.obj[objIndex] = null;
+                    speed += 1;
                     break;
                 case "Chest":
-                    gamePanel.ui.gameFinished =  true;
                     gamePanel.ui.showMessage("You dont have a Key !");
                     gamePanel.stopMusic();
                     gamePanel.playSoundEffect(4);
+                    gamePanel.ui.gameFinished =  true;
                     break;
             }
         }
     }
 
+    // RENDER PLAYER
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         switch (direction) {
             case "up":
-                if (spriteNum == 1) { image = up1; }
-                if (spriteNum == 2) { image = up2; }
+                if (spriteNum == 1) image = up1;
+                if (spriteNum == 2) image = up2;
                 break;
             case "down":
-                if (spriteNum == 1) { image = down1; }
-                if (spriteNum == 2) { image = down2; }
+                if (spriteNum == 1) image = down1;
+                if (spriteNum == 2) image = down2;
                 break;
             case "left":
-                if (spriteNum == 1) { image = left1; }
-                if (spriteNum == 2) { image = left2; }
+                if (spriteNum == 1) image = left1;
+                if (spriteNum == 2) image = left2;
                 break;
             case "right":
                 if (spriteNum == 1) { image = right1; }
                 if (spriteNum == 2) { image = right2; }
                 break;
         }
-        g2.drawImage(image, screenX, screenY, gamePanel.tileSize, gamePanel.tileSize, null);
+        g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
     }
 }

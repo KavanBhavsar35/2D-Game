@@ -5,6 +5,11 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler  implements KeyListener{
     
+    GamePanel gamePanel;
+    public KeyHandler(GamePanel gamePanel){
+        this.gamePanel = gamePanel;
+    }
+
     // KEY PRESES
     public boolean upPressed, downPressed, leftPressed, rightPressed;
 
@@ -20,10 +25,17 @@ public class KeyHandler  implements KeyListener{
         
         int code =  e.getKeyCode();
 
-        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) upPressed = true;
-        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) downPressed = true;
-        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) leftPressed = true;
-        if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) rightPressed = true;
+        if (code == KeyEvent.VK_W) upPressed = true;
+        if (code == KeyEvent.VK_S) downPressed = true;
+        if (code == KeyEvent.VK_A) leftPressed = true;
+        if (code == KeyEvent.VK_D) rightPressed = true;
+        if (code == KeyEvent.VK_P) {
+            if (gamePanel.gameState == gamePanel.playState) {
+                gamePanel.gameState = gamePanel.pauseState;
+            } else {
+                gamePanel.gameState = gamePanel.playState;
+            }
+        }
 
         if (code == KeyEvent.VK_T) {
             if (checkDrawTime) {
@@ -39,9 +51,9 @@ public class KeyHandler  implements KeyListener{
         
         int code = e.getKeyCode();
 
-        if (code == KeyEvent.VK_W || code == KeyEvent.VK_UP) upPressed = false;
-        if (code == KeyEvent.VK_S || code == KeyEvent.VK_DOWN) downPressed = false;
-        if (code == KeyEvent.VK_A || code == KeyEvent.VK_LEFT) leftPressed = false;
-        if (code == KeyEvent.VK_D || code == KeyEvent.VK_RIGHT) rightPressed = false;
+        if (code == KeyEvent.VK_W) upPressed = false;
+        if (code == KeyEvent.VK_S) downPressed = false;
+        if (code == KeyEvent.VK_A) leftPressed = false;
+        if (code == KeyEvent.VK_D) rightPressed = false;
     }   
 }

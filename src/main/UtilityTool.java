@@ -20,4 +20,10 @@ public class UtilityTool {
 
         return (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
     }
+
+    // GET X FOR CENTER
+    public static final int getXForCenteredText(Graphics2D g2, String text) {
+        int x = GamePanel.screenWidth / 2 - UtilityTool.textLength(g2, text) / 2;
+        return x;
+    }
 }

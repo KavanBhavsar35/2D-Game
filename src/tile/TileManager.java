@@ -16,8 +16,8 @@ import main.GamePanel;
 public class TileManager {
 
     // CONSTANTS
-    int MAX_TILES = 10;
-    String MAP_FILE_NAME = "world01.txt";
+    int maxTiles = 50;
+    String mapFileName = "worldV2.txt";
     GamePanel gamePanel;
     public Tile[] tile;
     public int mapTileNumber[][];
@@ -26,12 +26,12 @@ public class TileManager {
 
         // INITIATION
         this.gamePanel = gamePanel;
-        tile = new Tile[MAX_TILES];
+        tile = new Tile[maxTiles];
         mapTileNumber = new int[GamePanel.maxWorldCol][GamePanel.maxWorldRow];
 
         // LOADING RESPECTIVE TILES ACCORDING TO MAP
         this.getTileImage();
-        this.loadMap("/maps/" + MAP_FILE_NAME);
+        this.loadMap("/maps/" + mapFileName);
     }
 
     // LOAD MAP
@@ -68,20 +68,65 @@ public class TileManager {
 
     // LOAD IMAGES
     public void getTileImage() {
-        String[] TILE_NAMES = { "grass.png", "wall.png", "water.png", "earth.png", "tree.png", "sand.png" };
-        boolean[] COLLISION = { false, true, true, false, true, false };
 
-        for (int i = 0; i < TILE_NAMES.length; i++) {
+        // PLACEHOLDER
+        setup(0, "grass00.png", false);
+        setup(1, "grass00.png", false);
+        setup(2, "grass00.png", false);
+        setup(3, "grass00.png", false);
+        setup(4, "grass00.png", false);
+        setup(5, "grass00.png", false);
+        setup(6, "grass00.png", false);
+        setup(7, "grass00.png", false);
+        setup(8, "grass00.png", false);
+        setup(9, "grass00.png", false);
 
-            try {
-                tile[i] = new Tile(ImageIO.read(getClass().getResourceAsStream("/tiles/" + TILE_NAMES[i])), COLLISION[i]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        // ACTUAL IMAGES
+        setup(10, "grass00.png", false);
+        setup(11, "grass01.png", false);
+        setup(12, "water00.png", true);
+        setup(13, "water01.png", true);
+        setup(14, "water02.png", true);
+        setup(15, "water03.png", true);
+        setup(16, "water04.png", true);
+        setup(17, "water05.png", true);
+        setup(18, "water06.png", true);
+        setup(19, "water07.png", true);
+        setup(20, "water08.png", true);
+        setup(21, "water09.png", true);
+        setup(22, "water10.png", true);
+        setup(23, "water11.png", true);
+        setup(24, "water12.png", true);
+        setup(25, "water13.png", true);
+        setup(26, "road00.png", false);
+        setup(27, "road01.png", false);
+        setup(28, "road02.png", false);
+        setup(29, "road03.png", false);
+        setup(30, "road04.png", false);
+        setup(31, "road05.png", false);
+        setup(32, "road06.png", false);
+        setup(33, "road07.png", false);
+        setup(34, "road08.png", false);
+        setup(35, "road09.png", false);
+        setup(36, "road10.png", false);
+        setup(37, "road11.png", false);
+        setup(38, "road12.png", false);
+        setup(39, "earth.png", false);
+        setup(40, "wall.png", true);
+        setup(41, "tree.png", true);
+
 
     }
-    
+
+    // SETUP
+    public void setup(int index, String tileImageName, boolean collision) {
+        try {
+            tile[index] = new Tile(ImageIO.read(getClass().getResourceAsStream("/tiles/" + tileImageName)), collision);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // CONDITIONAL RENDERING FOR PLAYER VIEW GRID
     public void draw(Graphics2D g2) {
 

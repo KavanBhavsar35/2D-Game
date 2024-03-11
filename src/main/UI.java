@@ -92,8 +92,7 @@ public class UI {
             // MESSAGE
             if (messageOn) {
                 g2.setFont(g2.getFont().deriveFont(30f));
-                g2.drawString(message, GamePanel.tileSize * (GamePanel.maxScreenRow - 1) + GamePanel.tileSize / 2,
-                        GamePanel.tileSize * (GamePanel.maxScreenCol - 5) + GamePanel.tileSize / 2);
+                g2.drawString(message, GamePanel.tileSize / 2, GamePanel.tileSize * 5);
 
                 messageCounter++;
 

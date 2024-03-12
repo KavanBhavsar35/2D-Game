@@ -4,23 +4,23 @@ import java.util.Random;
 
 import main.GamePanel;
 
-public class NPColdMan extends Entity{
+public class NpcOldMan extends Entity{
     
-    public NPColdMan(GamePanel gamePanel, int x, int y) {
+    public NpcOldMan(GamePanel gamePanel, int x, int y) {
         this(gamePanel);
         this.worldX = x * GamePanel.tileSize;
         this.worldY = y * GamePanel.tileSize;
     }
 
-    public NPColdMan(GamePanel gamePanel) {
+    public NpcOldMan(GamePanel gamePanel) {
         super(gamePanel);
         
         direction = "down";
         speed = 1;
 
         this.getPlayerImage();
+        this.setDialouge();
     }
-
 
     // LOAD IMAGES
     public void getPlayerImage() {
@@ -35,6 +35,16 @@ public class NPColdMan extends Entity{
         right2 = setup("/npc/oldman_right_2.png");
     }
 
+    // DIALOUGES
+    public void setDialouge() {
+        dialouges[0] = "Hello, lad.";
+        dialouges[1] = "So you've come to this island to \nfind the treasure ?";
+        dialouges[2] = "I used to be a great wizardd but now... \nI'm a bit too old for taking an\nadventure";
+        dialouges[3] = "Well, Good Luck to you !";
+        // TODO: https://youtu.be/mQmNO9adBWU?list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq&t=1005
+    }
+
+    //
     public void setAction() {
 
         actionLockCounter++;
@@ -52,4 +62,7 @@ public class NPColdMan extends Entity{
         }
     }
 
+    public void speak() {
+        super.speak();
+    }
 }

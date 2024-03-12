@@ -71,7 +71,7 @@ public class Player extends Entity {
             else if (keyHandler.rightPressed == true)  direction = "right"; 
             
             // CHECK TILE COLLISION
-            collionOn = false;
+            collisionOn = false;
             gamePanel.collisionChecker.checkTile(this);
 
             // CHECK OBJECT COLLISION
@@ -83,7 +83,7 @@ public class Player extends Entity {
             interactNPC(npcIndex);
             
             // MOVE IF COLLISION IS OFF
-            if (collionOn == false) {
+            if (collisionOn == false) {
                 switch (direction) {
                     case "up": worldY -= speed; break;
                     case "down": worldY += speed; break;
@@ -112,7 +112,13 @@ public class Player extends Entity {
     // INTERACTION
     public void interactNPC(int i) {
         if (i != 999) {
-            System.out.println("hitt");
+            if (keyHandler.enterPressed) {
+                    
+                gamePanel.gameState = gamePanel.dialougeState;
+                gamePanel.npc[i].speak();
+            }
+
+            keyHandler.enterPressed = false;
         }
     }
 

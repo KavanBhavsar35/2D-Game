@@ -62,7 +62,7 @@ public class CollisionChecker {
         // CHECK IF COLLIDING
         if (gamePanel.tileManager.tile[tileNum1].collision == true ||
                 gamePanel.tileManager.tile[tileNum2].collision == true) {
-            entity.collionOn = true;
+            entity.collisionOn = true;
         }
     }
 
@@ -103,7 +103,7 @@ public class CollisionChecker {
 
                     // PREVENT ENTITY FROM MOVING
                     if (gamePanel.obj[i].collision) {
-                        entity.collionOn = true;
+                        entity.collisionOn = true;
                     }
 
                     // CHECK IF PLAYER
@@ -161,7 +161,7 @@ public class CollisionChecker {
                 if (entity.solidArea.intersects(target[i].solidArea)) {
 
                     // PREVENT ENTITY FROM MOVING
-                    entity.collionOn = true;
+                    entity.collisionOn = true;
                     index = i;
 
                 }
@@ -209,7 +209,7 @@ public class CollisionChecker {
             if (entity.solidArea.intersects(gamePanel.player.solidArea)) {
 
                 // PREVENT ENTITY FROM MOVING
-                entity.collionOn = true;
+                entity.collisionOn = true;
             }
 
             // RESET ENTITY'S SOLID AREA

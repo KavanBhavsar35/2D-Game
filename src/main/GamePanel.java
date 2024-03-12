@@ -64,6 +64,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int gameState;
     public final int playState = 1;
     public final int pauseState = 2;
+    public final int dialougeState = 3;
 
 
     // GAME PANEL INIT
@@ -86,7 +87,7 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setObject();
         assetSetter.setNPC();
         playMusic(0);
-        // stopMusic(); //TODO turn off sound
+        stopMusic(); //TODO turn off sound
         gameState = playState;
     }
 
@@ -140,6 +141,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             // UPDATE NPC
             for (int i = 0; i < npc.length; i++) {
+
                 if (npc[i] != null) {
                     npc[i].update();
                 }

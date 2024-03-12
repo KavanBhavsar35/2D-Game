@@ -11,6 +11,9 @@ import main.UtilityTool;
 
 public class Entity {
 
+    //  CONSTANTS
+    public final int maxDialouges = 20;
+
     // INITIATION
     GamePanel gamePanel;
     public int worldX, worldY;
@@ -21,8 +24,10 @@ public class Entity {
     public int spriteNum = 1;
     public Rectangle solidArea = new Rectangle(0, 0, GamePanel.tileSize, GamePanel.tileSize);
     public int solidAreaDefaultX, solidAreaDefaultY;
-    public boolean collionOn = false;
+    public boolean collisionOn = false;
     public int actionLockCounter = 0;
+    String[] dialouges = new String[maxDialouges];
+    int dialougeIndex = 0;
 
     public Entity(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -31,19 +36,32 @@ public class Entity {
     // SETTING ACTIONS 
     public void setAction() {}
 
+    // SPEAK ACTION
+    public void speak() {
+        if (dialouges[dialougeIndex] == null) dialougeIndex = 0;
+        gamePanel.ui.currentDialouge = dialouges[dialougeIndex++];
+
+        switch (gamePanel.player.direction) {
+            case "up": this.direction = "down"; break;
+            case "down": this.direction = "up"; break;
+            case "left": this.direction = "right"; break;
+            case "right": this.direction = "left"; break;
+        }
+    }
+
     // UPDATE
     public void update() {
 
         setAction();
 
-        collionOn = false;
+        collisionOn = false;
 
         gamePanel.collisionChecker.checkObject(this, false);
         gamePanel.collisionChecker.checkTile(this);
         gamePanel.collisionChecker.checkPlayer(this);
 
         // MOVE IF COLLISION IS OFF
-        if (collionOn == false) {
+        if (collisionOn == false) {
             switch (direction) {
                 case "up": worldY -= speed; break;
                 case "down": worldY += speed; break;
@@ -62,11 +80,11 @@ public class Entity {
     }
 
     // SETUP
-    public BufferedImage setup(String imagePathl) {
+    public BufferedImage setup(String imagePath) {
 
         BufferedImage image = null;
         try {
-            image = ImageIO.read(getClass().getResourceAsStream(imagePathl));
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath));
             image = UtilityTool.scaleImage(image, GamePanel.tileSize, GamePanel.tileSize);
         } catch (Exception e) {
             e.printStackTrace();

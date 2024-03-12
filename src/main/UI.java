@@ -4,26 +4,46 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+
+import object.ObjHeart;
+import object.SuperObject;
 
 public class UI {
 
     // INITIATION
     GamePanel gamePanel;
     Graphics2D g2;
-    Font arial_40, arial_80B;
+    Font maruMonica, purisaBold;
+    BufferedImage heartFull, heartHalf, heartBlank;
     public boolean messageOn = false;
     public String message = "";
     int messageCounter = 0;
     int messageDuration = 2; // sec
     public boolean gameFinished = false;
+    public int commandNum = 0;
+
     public String currentDialouge = "";
 
     public UI(GamePanel gamePanel) {
 
         // UI SETTINGS
         this.gamePanel = gamePanel;
-        arial_40 = new Font("Dialog", Font.PLAIN, 40);
-        arial_80B = new Font("Dialog", Font.BOLD, 80);
+        
+        
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/font/maruMonica.ttf");
+            maruMonica = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // CREATING HUD OBJECT
+        SuperObject heart = new ObjHeart();
+        heartFull = heart.image;
+        heartHalf = heart.image2;
+        heartBlank = heart.image3;
     }
 
     // ACCESS FUNCTIONS
@@ -37,18 +57,105 @@ public class UI {
 
         this.g2 = g2;
 
-        g2.setFont(arial_40);
+        g2.setFont(maruMonica);
         g2.setColor(Color.white);
 
+        if (gamePanel.gameState == gamePanel.titleState) {
+            this.drawTitleScreen();
+        }
         if (gamePanel.gameState == gamePanel.playState) {
-            // DO STUFF
+            this.drawPlayerLife();
         }
         if (gamePanel.gameState == gamePanel.pauseState) {
+            this.drawPlayerLife();
             this.drawPauseScreen();
         }
         if (gamePanel.gameState == gamePanel.dialougeState) {
+            this.drawPlayerLife();
             this.drawDialougeState();
         }
+    }
+
+    private void drawPlayerLife() {
+        
+        int x =GamePanel.tileSize / 2;
+        int y = GamePanel.tileSize / 2;
+        int i = 0;
+        
+        // DRAW MAX LIFE
+        while (i < gamePanel.player.maxLife / 2) {
+            g2.drawImage(heartBlank, x, y, null);
+            i++;
+            x += GamePanel.tileSize;
+        }
+
+        // RESET
+        x =GamePanel.tileSize / 2;
+        y = GamePanel.tileSize / 2;
+        i = 0;
+
+        // DRAW CURRENT LIFE
+        while (i < gamePanel.player.life) {
+            g2.drawImage(heartHalf, x, y, null);
+            i++;
+            if (i < gamePanel.player.life) {
+                g2.drawImage(heartFull, x, y, null);
+            }
+            i++;
+            x += GamePanel.tileSize;
+        }
+    }
+
+    private void drawTitleScreen() {
+        
+        int offset = 2;
+
+        //TITLE NAME
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96f));
+        String text = "Blue Boy Adventure";
+        int x = UtilityTool.getXForCenteredText(g2, text);
+        int y = GamePanel.tileSize * 3;
+
+        // SHADOW
+        g2.setColor(Color.gray);
+        g2.drawString(text, x + offset, y + offset);
+
+        // TITLE
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y);
+
+        // BLUE BOY IMAGE
+        x = GamePanel.screenWidth / 2 - (GamePanel.tileSize * 2 / 2);
+        y += GamePanel.tileSize * 2;
+        g2.drawImage(gamePanel.player.down1, x, y, GamePanel.tileSize * 2, GamePanel.tileSize * 2, null);
+
+        // MENU
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48f));
+
+        text = "NEW GAME";
+        x = UtilityTool.getXForCenteredText(g2, text);
+        y += GamePanel.tileSize * 3.5;
+        g2.drawString(text, x, y);
+        if (commandNum == 0) {
+            g2.drawString(">", x - GamePanel.tileSize, y);
+        }
+        
+        text = "LOAD GAME";
+        x = UtilityTool.getXForCenteredText(g2, text);
+        y += GamePanel.tileSize;
+        g2.drawString(text, x, y);
+        if (commandNum == 1) {
+            g2.drawString(">", x - GamePanel.tileSize, y);
+        }
+
+        text = "QUIT";
+        x = UtilityTool.getXForCenteredText(g2, text);
+        y += GamePanel.tileSize;
+        g2.drawString(text, x, y);
+        if (commandNum == 2) {
+            g2.drawString(">", x - GamePanel.tileSize, y);
+        }
+
     }
 
     private void drawPauseScreen() {

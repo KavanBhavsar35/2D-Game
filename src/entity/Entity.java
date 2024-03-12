@@ -29,6 +29,11 @@ public class Entity {
     String[] dialouges = new String[maxDialouges];
     int dialougeIndex = 0;
 
+    // CHARACTER STATUS
+    public int maxLife;
+    public int life;
+
+
     public Entity(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }

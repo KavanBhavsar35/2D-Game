@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int tileSize = originalTileSize * scale;
     public static final int screenWidth = tileSize * maxScreenCol;
     public static final int screenHeight = tileSize * maxScreenRow;
-    public static final Color gameColor = Color.white;
+    public static final Color gameColor = Color.black ;
 
     // FPS
     protected static final int fps = 60;
@@ -54,18 +54,18 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
-    
+
     // ENTITY AND OBJECT
     public SuperObject[] obj = new SuperObject[maxObjects];
     public Player player = new Player(this, keyHandler);
-    public Entity[] npc= new Entity[maxNPC]; 
-    
+    public Entity[] npc = new Entity[maxNPC];
+
     // GAME STATE
     public int gameState;
+    public final int titleState = 0;
     public final int playState = 1;
     public final int pauseState = 2;
     public final int dialougeState = 3;
-
 
     // GAME PANEL INIT
     public GamePanel() {
@@ -87,8 +87,7 @@ public class GamePanel extends JPanel implements Runnable {
         assetSetter.setObject();
         assetSetter.setNPC();
         playMusic(0);
-        stopMusic(); //TODO turn off sound
-        gameState = playState;
+        gameState = titleState; 
     }
 
     // RUN METHOD - Is automatically invoked ok calling a thread
@@ -111,7 +110,7 @@ public class GamePanel extends JPanel implements Runnable {
             delta += (currentTime - lastTime) / drawInterval;
             timer += (currentTime - lastTime);
             lastTime = currentTime;
-            
+
             // UPDATE TIME IF DELTA HAS PASS
             if (delta >= 1) {
                 update();
@@ -167,42 +166,47 @@ public class GamePanel extends JPanel implements Runnable {
             drawStart = System.nanoTime();
         }
 
+        // TITLE SCREEN
+        if (gameState == titleState) {
+            ui.draw(g2);
+        } else {
 
-        // RENDER
-        // TILES
-        tileManager.draw(g2);
+            // RENDER
+            // TILES
+            tileManager.draw(g2);
 
-        // OBJECTS
-        for (int i = 0; i < obj.length; i++) {
-            if (obj[i] != null) {
-                obj[i].draw(this, g2);
+            // OBJECTS
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    obj[i].draw(this, g2);
+                }
             }
-        }
 
-        // NPC
-        for (int i = 0; i < npc.length; i++) {
-            if (npc[i] != null) {
-                npc[i].draw(g2);
+            // NPC
+            for (int i = 0; i < npc.length; i++) {
+                if (npc[i] != null) {
+                    npc[i].draw(g2);
+                }
             }
+
+            // PLAYER
+            player.draw(g2);
+
+            // USER INTERFACE
+            ui.draw(g2);
+
+            // DEBUG
+            if (keyHandler.checkDrawTime) {
+                long drawEnd = System.nanoTime();
+                long passed = drawEnd - drawStart;
+                g2.setColor(Color.white);
+                g2.drawString("Draw time: " + passed, 10, 400);
+                System.out.println("Draw time: " + passed);
+            }
+
+            // FREE RESOURCES
+            g2.dispose();
         }
-
-        // PLAYER
-        player.draw(g2);
-
-        // USER INTERFACE
-        ui.draw(g2);
-
-        // DEBUG
-        if (keyHandler.checkDrawTime) {
-            long drawEnd = System.nanoTime();
-            long passed = drawEnd - drawStart;
-            g2.setColor(Color.white);
-            g2.drawString("Draw time: " + passed, 10, 400);
-            System.out.println("Draw time: " + passed);
-        }
-
-        // FREE RESOURCES
-        g2.dispose();
     }
 
     // LOOPED BG MUSIC

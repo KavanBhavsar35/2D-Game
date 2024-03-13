@@ -47,13 +47,14 @@ public class GamePanel extends JPanel implements Runnable {
 
     // MANAGER
     TileManager tileManager = new TileManager(this);
-    KeyHandler keyHandler = new KeyHandler(this);
+    public KeyHandler keyHandler = new KeyHandler(this);
     Thread gameThread;
     Sound music = new Sound();
     Sound soundEffect = new Sound();
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
+    public EventHandler eventHandler = new EventHandler(this);
 
     // ENTITY AND OBJECT
     public SuperObject[] obj = new SuperObject[maxObjects];
@@ -86,7 +87,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         assetSetter.setObject();
         assetSetter.setNPC();
-        playMusic(0);
+        // playMusic(0);
         gameState = titleState; 
     }
 

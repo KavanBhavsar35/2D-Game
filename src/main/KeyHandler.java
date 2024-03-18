@@ -28,8 +28,14 @@ public class KeyHandler  implements KeyListener{
         // GAME STATE
         if (gamePanel.gameState == gamePanel.titleState) {
                
-            if (code == KeyEvent.VK_W) gamePanel.ui.commandNum--;
-            if (code == KeyEvent.VK_S) gamePanel.ui.commandNum++;
+            if (code == KeyEvent.VK_W) {
+                if (gamePanel.ui.commandNum == 0) gamePanel.ui.commandNum = 2; 
+                else gamePanel.ui.commandNum--;
+            }
+            if (code == KeyEvent.VK_S) {
+                if (gamePanel.ui.commandNum == 2) gamePanel.ui.commandNum = 0; 
+                else gamePanel.ui.commandNum++; 
+            }      
             if (code == KeyEvent.VK_ENTER) {
                 if (gamePanel.ui.commandNum == 0) {
                     gamePanel.gameState = gamePanel.playState;

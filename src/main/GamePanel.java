@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 //EXTENDED LIBRARY CLASSES
 import javax.swing.JPanel;
@@ -13,7 +14,6 @@ import javax.swing.JPanel;
 import entity.Entity;
 //PACKAGE CLASSES
 import entity.Player;
-import object.SuperObject;
 import tile.TileManager;
 
 // GAMEPANEL CONSTRUCTOR
@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
     public static final int tileSize = originalTileSize * scale;
     public static final int screenWidth = tileSize * maxScreenCol;
     public static final int screenHeight = tileSize * maxScreenRow;
-    public static final Color gameColor = Color.black ;
+    public static final Color gameColor = Color.black;
 
     // FPS
     protected static final int fps = 60;
@@ -44,6 +44,7 @@ public class GamePanel extends JPanel implements Runnable {
     // OBJECTS
     public static final int maxObjects = 10;
     public static final int maxNPC = 10;
+    public static final int maxMonster = 20;
 
     // MANAGER
     TileManager tileManager = new TileManager(this);
@@ -57,9 +58,11 @@ public class GamePanel extends JPanel implements Runnable {
     public EventHandler eventHandler = new EventHandler(this);
 
     // ENTITY AND OBJECT
-    public SuperObject[] obj = new SuperObject[maxObjects];
     public Player player = new Player(this, keyHandler);
+    public Entity[] obj = new Entity[maxObjects];
     public Entity[] npc = new Entity[maxNPC];
+    public Entity[] monster = new Entity[maxMonster];
+    ArrayList<Entity> entityList = new ArrayList<>();
 
     // GAME STATE
     public int gameState;
@@ -87,8 +90,9 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         assetSetter.setObject();
         assetSetter.setNPC();
+        assetSetter.setMonster();
         // playMusic(0);
-        gameState = titleState; 
+        gameState = titleState;
     }
 
     // RUN METHOD - Is automatically invoked ok calling a thread
@@ -146,6 +150,14 @@ public class GamePanel extends JPanel implements Runnable {
                     npc[i].update();
                 }
             }
+
+            // UPDATE MONSTERS
+            for (int i = 0; i < monster.length; i++) {
+
+                if (monster[i] != null) {
+                    monster[i].update();
+                }
+            }
         }
 
         if (gameState == pauseState) {
@@ -176,19 +188,58 @@ public class GamePanel extends JPanel implements Runnable {
             // TILES
             tileManager.draw(g2);
 
-            // OBJECTS
-            for (int i = 0; i < obj.length; i++) {
-                if (obj[i] != null) {
-                    obj[i].draw(this, g2);
+            
+            entityList.add(player);
+            // ADD ENTITIES TO THE LIST
+            for (int i = 0; i < npc.length; i++) {
+                if (npc[i] != null) {
+                    entityList.add(npc[i]);
                 }
             }
 
-            // NPC
-            for (int i = 0; i < npc.length; i++) {
-                if (npc[i] != null) {
-                    npc[i].draw(g2);
+            for (int i = 0; i < obj.length; i++) {
+                if (obj[i] != null) {
+                    entityList.add(obj[i]);
                 }
             }
+
+            for (int i = 0; i < monster.length; i++) {
+                if (monster[i] != null) {
+                    entityList.add(monster[i]);
+                }
+            }
+
+            // SORT
+            for (int i = 0; i < entityList.size() - 1; i++) {
+                for (int j = 0; j < entityList.size() - i - 1; j++) {
+                    Entity e1 = entityList.get(j);
+                    Entity e2 = entityList.get(j + 1);
+
+                    if (e1 == null && e2 == null) {
+                        continue; // Skip if both entities are null
+                    } else if (e1 == null) {
+                        // Move null entity to the end
+                        entityList.add(entityList.remove(j));
+                    } else if (e2 == null) {
+                        // Move non-null entity before null entity
+                        entityList.add(j, entityList.remove(j + 1));
+                    } else if (e1.worldY > e2.worldY) {
+                        // Swap entities if e1.worldY is greater than e2.worldY
+                        entityList.set(j, e2);
+                        entityList.set(j + 1, e1);
+                    } else if (e1.worldY == e2.worldY && e1.worldX > e2.worldX) {
+                        // If worldY is the same, sort by worldX
+                        entityList.set(j, e2);
+                        entityList.set(j + 1, e1);
+                    }
+                }
+            }
+
+            // DRAW ENTITIES
+            for (int i = 0; i < entityList.size(); i++) {
+                entityList.get(i).draw(g2);
+            }
+            entityList.clear();
 
             // PLAYER
             player.draw(g2);

@@ -7,8 +7,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
+import entity.Entity;
 import object.ObjHeart;
-import object.SuperObject;
 
 public class UI {
 
@@ -40,7 +40,7 @@ public class UI {
         }
 
         // CREATING HUD OBJECT
-        SuperObject heart = new ObjHeart();
+        Entity heart = new ObjHeart(gamePanel);
         heartFull = heart.image;
         heartHalf = heart.image2;
         heartBlank = heart.image3;

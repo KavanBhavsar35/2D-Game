@@ -18,6 +18,13 @@ public class NpcOldMan extends Entity{
         direction = "down";
         speed = 1;
 
+        solidArea.x = 3;
+        solidArea.y = 18;
+        solidArea.width = 42;
+        solidArea.height = 30;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
+
         this.getPlayerImage();
         this.setDialouge();
     }

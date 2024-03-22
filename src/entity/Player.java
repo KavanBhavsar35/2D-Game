@@ -1,6 +1,8 @@
 package entity;
 
 import main.KeyHandler;
+
+import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -13,7 +15,8 @@ public class Player extends Entity {
     
     public final int screenX;
     public final int screenY;
-    
+    public int standCounter = 0;
+
     // CONSTRUCTOR
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
         
@@ -40,8 +43,10 @@ public class Player extends Entity {
 
     // DEFAULT VALS
     public void setDefaultValue() {
-        worldX = GamePanel.tileSize * 23;
-        worldY = GamePanel.tileSize * 21;
+        // worldX = GamePanel.tileSize * 23;
+        // worldY = GamePanel.tileSize * 21;
+        worldX = GamePanel.tileSize * 10;
+        worldY = GamePanel.tileSize * 13;
         speed = 4;
         direction = "down";
 
@@ -86,6 +91,10 @@ public class Player extends Entity {
             int npcIndex =  gamePanel.collisionChecker.checkEntity(this, gamePanel.npc);
             interactNPC(npcIndex);
             
+            // CHECK MONSTER COLLISION
+            int monsterIndex =  gamePanel.collisionChecker.checkEntity(this, gamePanel.monster);
+            contactMonster(monsterIndex);
+            
             // CHECKING EVENT
             gamePanel.eventHandler.checkEvent();
             gamePanel.keyHandler.enterPressed = false;
@@ -108,7 +117,32 @@ public class Player extends Entity {
 	        	else if (spriteNum == 2) spriteNum = 1; 
 	        	spriteCounter = 0;
 	        }
-    	}
+    	} else {
+            standCounter++;
+            System.out.println(standCounter);
+            if (standCounter == 20) {
+                spriteNum = 1;
+                standCounter = 0;
+            }
+        }
+
+        if (isInvincible) {
+            invincibleCounter++;
+            if (invincibleCounter > invincibleDuration) {
+                isInvincible = false;
+                invincibleCounter = 0;
+            }
+        }
+    }
+
+    private void contactMonster(int monsterIndex) {
+        
+        if (monsterIndex == 999) return;
+        if (!isInvincible) {
+            life -= 1;
+            isInvincible = true;
+        }
+
     }
 
     // PICK A OBJECT
@@ -150,6 +184,18 @@ public class Player extends Entity {
                 if (spriteNum == 2) { image = right2; }
                 break;
         }
+
+        float alpha = 1f;
+        if (isInvincible) {
+            alpha =  0.3f;
+        }
+        if (invincibleCounter == 40 || invincibleCounter == 90 || invincibleCounter == 100) {
+            alpha =  1f;
+        } else if (invincibleCounter == 65 || invincibleCounter == 70) {
+            alpha =  0.3f;
+        }
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha)); 
         g2.drawImage(image, screenX, screenY, GamePanel.tileSize, GamePanel.tileSize, null);
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 }

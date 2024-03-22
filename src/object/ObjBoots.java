@@ -1,25 +1,22 @@
 package object;
 
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
+import entity.Entity;
 import main.GamePanel;
 
-public class ObjBoots extends SuperObject{
-    public ObjBoots(int x, int y) {
+public class ObjBoots extends Entity{
+    public ObjBoots(GamePanel gamePanel) {
 
-        // CONSTANTS
+        super(gamePanel);// CONSTANTS
         String NAME = "Boots";
-        String FILE_NAME = "boots.png"; 
-
+        String fileName = "boots.png"; 
+        
         // INITIATIONS
         this.name = NAME;
-        try {
-            this.image = ImageIO.read(getClass().getResourceAsStream("/objects/" + FILE_NAME));
-        } catch (IOException e) {
-            System.out.println("Error: " + e);
-        }
+        down1 = setup("/objects/" + fileName);
+
+    }
+    public ObjBoots(int x, int y, GamePanel gamePanel) {
+        this(gamePanel);
         this.worldX = x * GamePanel.tileSize;
         this.worldY = y * GamePanel.tileSize;
     }
